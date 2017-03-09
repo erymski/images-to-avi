@@ -38,16 +38,27 @@ namespace ImgToAvi
                 fps = DefaultFPS;
             }
 
-            using (var writer = new AviWriter(outputAvi) { FramesPerSecond = fps, EmitIndex1 = true })
+            var imageFiles = Directory.EnumerateFiles(inputDir, "*.png", SearchOption.TopDirectoryOnly)
+                                .OrderBy(s => s)
+                                .ToList();
+
+            Process(outputAvi, fps, imageFiles);
+
+            return 0;
+        }
+
+        private static void Process(string outputAvi, int fps, IReadOnlyCollection<string> imageFiles)
+        {
+            if (imageFiles.Count == 0) return;
+
+            using (var writer = new AviWriter(outputAvi) {FramesPerSecond = fps, EmitIndex1 = true})
             {
                 IAviVideoStream stream = null;
                 byte[] buffer = null;
                 bool first = true;
                 var rectangle = new Rectangle();
 
-                IEnumerable<string> files = Directory.EnumerateFiles(inputDir, "*.png", SearchOption.TopDirectoryOnly).OrderBy(s => s);
-
-                foreach (var file in files)
+                foreach (var file in imageFiles)
                 {
                     using (var bitmap = (Bitmap) Image.FromFile(file))
                     {
@@ -72,8 +83,6 @@ namespace ImgToAvi
                     }
                 }
             }
-
-            return 0;
         }
     }
 }

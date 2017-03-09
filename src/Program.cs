@@ -49,17 +49,24 @@ namespace ImgToAvi
 
                 foreach (var file in files)
                 {
+                    using (var bitmap = (Bitmap) Image.FromFile(file))
                     {
                         if (first)
                         {
                             first = false;
 
                             //stream = writer.AddUncompressedVideoStream(image.Width, image.Height);
+                            stream = writer.AddMotionJpegVideoStream(bitmap.Width, bitmap.Height, quality: 90);
                             //stream = writer.AddMpeg4VideoStream(image.Width, image.Height, fps, quality: 70, codec: KnownFourCCs.Codecs.MicrosoftMpeg4V2, forceSingleThreadedAccess: true);
 
+                            buffer = new byte[bitmap.Width * bitmap.Height * 4];
+                            rectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
                         }
 
 
+                        var raw = bitmap.LockBits(rectangle, ImageLockMode.ReadOnly, PixelFormat.Format32bppRgb);
+                        Marshal.Copy(raw.Scan0, buffer, 0, buffer.Length);
+                        bitmap.UnlockBits(raw);
 
                         stream.WriteFrame(true, buffer, 0, buffer.Length);
                     }

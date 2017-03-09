@@ -68,7 +68,7 @@ namespace ImgToAvi
         public static ISettings FromArgs(string[] args)
         {
             if (args == null || args.Length < 2)
-                throw new ValidationException("Usage: PngToAvi.exe inputDir outputAvi [fps]");
+                throw new ValidationException("Usage: ImgToAvi.exe inputDir outputAvi [fps]");
 
             var setting = new Settings
                             {

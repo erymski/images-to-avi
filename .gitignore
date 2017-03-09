@@ -1,0 +1,8 @@
+*.suo
+*.user
+.vs/
+**/packages/*
+**/[Bb]in/[Dd]ebug/*
+**/[Bb]in/[Rr]elease/*
+**/[Oo]bj/[Dd]ebug/*
+**/[Oo]bj/[Rr]elease/*

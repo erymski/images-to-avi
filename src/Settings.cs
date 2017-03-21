@@ -1,4 +1,6 @@
 using System.IO;
+using CommandLine;
+using CommandLine.Text;
 
 namespace ImgToAvi
 {
@@ -46,9 +48,15 @@ namespace ImgToAvi
         private const int DefaultFPS = 25;
         private const string DefaultMask = "*.png";
 
-        public string OutputAvi { get; set; }
-        public int FPS { get; set; } = DefaultFPS;
+        [Option('i', "input", HelpText = "Directory with images to process", Required = true)]
         public string DirName { get; set; }
+
+        [Option('o', "output", HelpText = "Pathname of output AVI file", Required = true)]
+        public string OutputAvi { get; set; }
+
+        [Option('f',"fps", DefaultValue = DefaultFPS, HelpText = "Frames per second", Required = false)]
+        public int FPS { get; set; } = DefaultFPS;
+
         public string Mask { get; set; } = DefaultMask; // TODO: pass mask as a parameter
 
         /// <summary>
@@ -57,7 +65,7 @@ namespace ImgToAvi
         public void Validate()
         {
             if (!Directory.Exists(DirName))
-                throw new ValidationException("Input dir is missing");
+                throw new ValidationException($"Input dir '{DirName}' is missing");
         }
 
         /// <summary>
@@ -67,24 +75,11 @@ namespace ImgToAvi
         /// <returns>The settings.</returns>
         public static ISettings FromArgs(string[] args)
         {
-            if (args == null || args.Length < 2)
-                throw new ValidationException("Usage: ImgToAvi.exe inputDir outputAvi [fps]");
-
-            var setting = new Settings
-                            {
-                                DirName = args[0],
-                                OutputAvi = args[1]
-                            };
-
-            // extract optional FPS parameter
-            int fps;
-            if (args.Length > 2 && int.TryParse(args[2], out fps))
-            {
-                setting.FPS = fps;
-            }
+            var setting = new Settings();
+            if (!Parser.Default.ParseArguments(args, setting))
+                throw new ValidationException(HelpText.AutoBuild(setting).ToString());
 
             setting.Validate();
-
             return setting;
         }
     }

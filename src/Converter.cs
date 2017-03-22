@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -23,6 +24,18 @@ namespace ImgToAvi
             var imageFiles = GetImageSequence(settings);
 
             Process(settings, imageFiles);
+
+            if (settings.DeleteDir)
+            {
+                Directory.Delete(settings.DirName, true);
+            }
+            else if (settings.DeleteImages)
+            {
+                foreach (var file in imageFiles)
+                {
+                    File.Delete(file);
+                }
+            }
         }
 
         /// <summary>

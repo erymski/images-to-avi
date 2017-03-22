@@ -36,16 +36,28 @@ namespace ImgToAvi
         string Mask { get; }
     }
 
+    internal interface IProcessingSettings
+    {
+        /// <summary>
+        /// If input images should be deleted after processing.
+        /// </summary>
+        bool DeleteImages { get; }
+
+        /// <summary>
+        /// If input directory should be deleted after processing.
+        /// </summary>
+        bool DeleteDir { get; set; }
+    }
+
     /// <summary>
     /// Combined settings.
     /// </summary>
-    internal interface ISettings : IAviSettings, ISearchSettings
+    internal interface ISettings : IAviSettings, ISearchSettings, IProcessingSettings
     {
     }
 
     internal class Settings : ISettings
     {
-        private const int DefaultFPS = 25;
         private const string DefaultMask = "*.png";
 
         [Option('i', "input", HelpText = "Directory with images to process", Required = true)]
@@ -54,10 +66,16 @@ namespace ImgToAvi
         [Option('o', "output", HelpText = "Pathname of output AVI file", Required = true)]
         public string OutputAvi { get; set; }
 
-        [Option('f',"fps", DefaultValue = DefaultFPS, HelpText = "Frames per second", Required = false)]
-        public int FPS { get; set; } = DefaultFPS;
+        [Option('f',"fps", DefaultValue = 25, HelpText = "Frames per second", Required = false)]
+        public int FPS { get; set; }
 
         public string Mask { get; set; } = DefaultMask; // TODO: pass mask as a parameter
+
+        [Option("delete-images", HelpText = "Delete processed images after AVI generated", Required = false)]
+        public bool DeleteImages { get; set; }
+
+        [Option('d', "delete-dir", HelpText = "Delete whole processing directory after AVI generated", Required = false)]
+        public bool DeleteDir { get; set; }
 
         /// <summary>
         /// Validate input parameters.

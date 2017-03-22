@@ -60,21 +60,21 @@ namespace ImgToAvi
     {
         private const string DefaultMask = "*.png";
 
-        [Option('i', "input", HelpText = "Directory with images to process", Required = true)]
+        [Option('i', "input", HelpText = "Directory with images to process. Images sorted alphabetically and merged to AVI.", Required = true)]
         public string DirName { get; set; }
 
-        [Option('o', "output", HelpText = "Pathname of output AVI file", Required = true)]
+        [Option('o', "output", HelpText = "Pathname of output AVI file.", Required = true)]
         public string OutputAvi { get; set; }
 
-        [Option('f',"fps", DefaultValue = 25, HelpText = "Frames per second", Required = false)]
+        [Option('f',"fps", DefaultValue = 25, HelpText = "Frames per second.", Required = false)]
         public int FPS { get; set; }
 
         public string Mask { get; set; } = DefaultMask; // TODO: pass mask as a parameter
 
-        [Option('d', "delete-dir", HelpText = "Delete whole processing directory after AVI generated", Required = false, DefaultValue = false)]
+        [Option('d', "delete-dir", HelpText = "Delete whole processing directory after AVI generated.", Required = false, DefaultValue = false)]
         public bool DeleteDir { get; set; }
 
-        [Option("delete-images", HelpText = "Delete processed images after AVI generated", Required = false, DefaultValue = false)]
+        [Option("delete-images", HelpText = "Delete processed images after AVI generated.", Required = false, DefaultValue = false)]
         public bool DeleteImages { get; set; }
 
         /// <summary>

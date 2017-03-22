@@ -39,14 +39,14 @@ namespace ImgToAvi
     internal interface IProcessingSettings
     {
         /// <summary>
-        /// If input images should be deleted after processing.
-        /// </summary>
-        bool DeleteImages { get; }
-
-        /// <summary>
         /// If input directory should be deleted after processing.
         /// </summary>
         bool DeleteDir { get; set; }
+
+        /// <summary>
+        /// If input images should be deleted after processing.
+        /// </summary>
+        bool DeleteImages { get; }
     }
 
     /// <summary>
@@ -71,11 +71,11 @@ namespace ImgToAvi
 
         public string Mask { get; set; } = DefaultMask; // TODO: pass mask as a parameter
 
-        [Option("delete-images", HelpText = "Delete processed images after AVI generated", Required = false)]
-        public bool DeleteImages { get; set; }
-
-        [Option('d', "delete-dir", HelpText = "Delete whole processing directory after AVI generated", Required = false)]
+        [Option('d', "delete-dir", HelpText = "Delete whole processing directory after AVI generated", Required = false, DefaultValue = false)]
         public bool DeleteDir { get; set; }
+
+        [Option("delete-images", HelpText = "Delete processed images after AVI generated", Required = false, DefaultValue = false)]
+        public bool DeleteImages { get; set; }
 
         /// <summary>
         /// Validate input parameters.
